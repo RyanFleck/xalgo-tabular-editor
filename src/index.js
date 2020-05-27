@@ -130,9 +130,18 @@ class Sheet extends React.Component {
                 {this.state.table.map(function (sections, s_key) {
                     return (
                         <table key={s_key} style={{ background: tableColor(s_key) }}>
-                            {sections.map(function (rowData, r_key) {
-                                return <Row key={r_key} elem={rowData}></Row>;
-                            })}
+                            <tbody>
+                                {sections.map(function (rowData, r_key) {
+                                    return (
+                                        <Row
+                                            first={r_key === 0}
+                                            key={r_key}
+                                            index={r_key}
+                                            elem={rowData}
+                                        ></Row>
+                                    );
+                                })}
+                            </tbody>
                         </table>
                     );
                 })}
@@ -148,22 +157,39 @@ function tableColor(key) {
 
 function Row(props) {
     return (
-        <tr key={props.key}>
+        <tr key={props.index}>
             {props.elem.map(function (elem, c_key) {
-                return <Cell key={c_key} elem={elem}></Cell>;
+                if (props.first) {
+                    return <HeadCell key={c_key} index={c_key} elem={elem}></HeadCell>;
+                } else {
+                    return <Cell key={c_key} index={c_key} elem={elem}></Cell>;
+                }
             })}
         </tr>
     );
 }
 
+function Cell(props) {
+    return <td index={props.index}>{props.elem}</td>;
+}
+
+function HeadCell(props) {
+    return <th index={props.index}>{props.elem}</th>;
+}
+
 Row.propTypes = {
-    key: PropTypes.number,
+    index: PropTypes.number,
     elem: PropTypes.arrayOf(PropTypes.string),
+    first: PropTypes.bool,
 };
 
-function Cell(props) {
-    return <th key={props.key}>{props.elem}</th>;
-}
+Cell.propTypes = {
+    index: PropTypes.number,
+    elem: PropTypes.string,
+};
+HeadCell.propTypes = Cell.propTypes;
+
+/* ==================================================== */
 
 function csvToNestedArrays(csvText) {
     const csvWithRegularNewlines = csvText.replace(/(\r\n|\n|\r)/gm, '\n');
@@ -191,10 +217,6 @@ function rowSplit(row) {
     return rowCells;
 }
 
-function isUpperCase(str) {
-    return str === str.toUpperCase();
-}
-
-// ========================================
+/* ==================================================== */
 
 ReactDOM.render(<Sheet />, document.getElementById('root'));
