@@ -97,7 +97,6 @@ class Game extends React.Component {
 class Sheet extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             squares: Array(9).fill(null),
             table: [],
@@ -114,12 +113,9 @@ class Sheet extends React.Component {
         const xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                const response = xmlhttp.responseText.replace(/(\r\n|\n|\r)/gm, '\n');
-                const rows = response.split('\n');
-                const cells = splitToCells(rows);
-                console.log('Cells:');
-                console.log(cells);
-                sheet.setState({ table: cells.slice() });
+                const response = xmlhttp.responseText;
+                const table = csvToNestedArrays(response);
+                sheet.setState({ table: table.slice() });
             }
         };
         xmlhttp.open('GET', url, false);
@@ -131,11 +127,15 @@ class Sheet extends React.Component {
         return (
             <div id="xa-table">
                 <h1>Table Viewer</h1>
-                <table style={{ width: '100%' }}>
-                    {this.state.table.map(function (elements, key) {
-                        return <Row key={key} elem={elements}></Row>;
-                    })}
-                </table>
+                {this.state.table.map(function (sections, s_key) {
+                    return (
+                        <table key={s_key}>
+                            {sections.map(function (rowData, r_key) {
+                                return <Row key={r_key} elem={rowData}></Row>;
+                            })}
+                        </table>
+                    );
+                })}
             </div>
         );
     }
@@ -143,9 +143,9 @@ class Sheet extends React.Component {
 
 function Row(props) {
     return (
-        <tr>
-            {props.elem.map(function (elem, rkey) {
-                return <th key={rkey}>{elem}</th>;
+        <tr key={props.key}>
+            {props.elem.map(function (elem, c_key) {
+                return <Cell key={c_key} elem={elem}></Cell>;
             })}
         </tr>
     );
@@ -153,21 +153,41 @@ function Row(props) {
 
 Row.propTypes = {
     key: PropTypes.number,
-    elem: PropTypes.string,
+    elem: PropTypes.arrayOf(PropTypes.string),
 };
 
-function splitToCells(rows) {
-    const cells = [];
-    rows.map((val) => {
-        const rowCells = val.split(',');
-        let len = rowCells.length - 1;
-        while (rowCells[len] == '') {
-            rowCells.pop();
-            len = rowCells.length - 1;
+function Cell(props) {
+    return <th key={props.key}>{props.elem}</th>;
+}
+
+function csvToNestedArrays(csvText) {
+    const csvWithRegularNewlines = csvText.replace(/(\r\n|\n|\r)/gm, '\n');
+    const csvRows = csvWithRegularNewlines.split('\n');
+
+    const groupedRows = [];
+    // Group into sections:
+    csvRows.forEach((row) => {
+        if (row.startsWith('METADATA.') || row.startsWith('INPUT.') || row.startsWith('OUTPUT.')) {
+            groupedRows.push([]);
         }
-        cells.push(rowCells);
+        groupedRows[groupedRows.length - 1].push(rowSplit(row));
     });
-    return cells;
+
+    return groupedRows;
+}
+
+function rowSplit(row) {
+    const rowCells = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+    let len = rowCells.length - 1;
+    while (rowCells[len] == '') {
+        rowCells.pop();
+        len = rowCells.length - 1;
+    }
+    return rowCells;
+}
+
+function isUpperCase(str) {
+    return str === str.toUpperCase();
 }
 
 // ========================================
