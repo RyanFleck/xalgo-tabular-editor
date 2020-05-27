@@ -95,16 +95,57 @@ class Game extends React.Component {
 }
 
 class FloatingCellInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { value: this.props.cellValue };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({ value: event.target.value });
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        this.props.updateCell(this.state.value);
+    }
+
+    componentDidUpdate(oldProps) {
+        const newProps = this.props;
+        if (oldProps.cellValue != newProps.cellValue) {
+            this.setState({ value: newProps.cellValue });
+        }
+    }
+
     render() {
         return (
             <div id={'cellInfo'}>
                 <h3>Cell Information</h3>
                 <p>{this.props.message}</p>
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        Value:
+                        <input
+                            type="text"
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                        ></input>
+                    </label>
+                    <input type="submit" value="Submit change" />
+                </form>
                 <p>{this.props.hoverMessage}</p>
             </div>
         );
     }
 }
+
+FloatingCellInfo.propTypes = {
+    message: PropTypes.string,
+    hoverMessage: PropTypes.string,
+    cellValue: PropTypes.string,
+    updateCell: PropTypes.func,
+};
 
 class Sheet extends React.Component {
     constructor(props) {
@@ -114,11 +155,13 @@ class Sheet extends React.Component {
             userMessage: 'Welcome to the Xalgorithms Rule Editor',
             hoverCellMessage: '',
             hoverCell: [],
+            selectedCell: [],
         };
 
         this.cellClick = this.cellClick.bind(this);
         this.cellHover = this.cellHover.bind(this);
         this.getCSV = this.getCSV.bind(this);
+        this.updateCell = this.updateCell.bind(this);
     }
 
     componentDidMount() {
@@ -146,7 +189,11 @@ class Sheet extends React.Component {
         const cell = addr[2];
         const value = this.state.table[group][row][cell];
         console.log(`Cell has value: ${value}`);
-        this.setState({ userMessage: `Selected cell [ ${group}, ${row}, ${cell} ] =>  ${value}` });
+        this.setState({
+            userMessage: `Selected cell [ ${group}, ${row}, ${cell} ] =>  ${value}`,
+            currentCellValue: value,
+            selectedCell: addr,
+        });
     }
 
     cellHover(addr) {
@@ -157,6 +204,16 @@ class Sheet extends React.Component {
             hoverCellMessage: `Hovering over ${this.state.table[group][0][0]} [ ${group}, ${row}, ${cell} ]`,
             hoverCell: addr,
         });
+    }
+
+    updateCell(content) {
+        console.log(`Updating cell [ ${this.state.selectedCell} ] with content =>   ${content}`);
+        const table = this.state.table.slice();
+        const group = this.state.selectedCell[0];
+        const row = this.state.selectedCell[1];
+        const cell = this.state.selectedCell[2];
+        table[group][row][cell] = content;
+        this.setState({ table: table });
     }
 
     render() {
@@ -195,6 +252,8 @@ class Sheet extends React.Component {
                 <FloatingCellInfo
                     message={this.state.userMessage}
                     hoverMessage={this.state.hoverCellMessage}
+                    cellValue={this.state.currentCellValue}
+                    updateCell={this.updateCell}
                 ></FloatingCellInfo>
             </div>
         );
