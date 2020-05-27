@@ -129,7 +129,7 @@ class Sheet extends React.Component {
                 <h1>Table Viewer</h1>
                 {this.state.table.map(function (sections, s_key) {
                     return (
-                        <table key={s_key}>
+                        <table key={s_key} style={{ background: tableColor(s_key) }}>
                             {sections.map(function (rowData, r_key) {
                                 return <Row key={r_key} elem={rowData}></Row>;
                             })}
@@ -139,6 +139,11 @@ class Sheet extends React.Component {
             </div>
         );
     }
+}
+
+function tableColor(key) {
+    const colors = ['#F8E0E0', '#F8ECE0', '#E6F8E0', '#E0ECF8', '#F2E0F7'];
+    return colors[key % colors.length];
 }
 
 function Row(props) {
