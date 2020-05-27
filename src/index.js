@@ -146,25 +146,33 @@ class Sheet extends React.Component {
         console.log('[SHEET] Rendering table...');
         return (
             <div id="xa-table">
-                <h1>Table Viewer</h1>
+                <h1>Table Editor</h1>
                 {this.state.table.map((sections, s_key) => {
                     return (
-                        <table key={s_key} style={{ background: tableColor(s_key) }}>
-                            <tbody>
-                                {sections.map((rowData, r_key) => {
-                                    return (
-                                        <Row
-                                            first={r_key === 0}
-                                            key={r_key}
-                                            index={r_key}
-                                            elem={rowData}
-                                            address={[s_key, r_key]}
-                                            cellClick={this.cellClick.bind(this)}
-                                        ></Row>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                        <div key={s_key}>
+                            <h3 className={'table-header'}>
+                                {sections[0][0]
+                                    .split('.')
+                                    .map((s) => s[0].toUpperCase() + s.substr(1).toLowerCase())
+                                    .join(' ') + ' Subtable'}
+                            </h3>
+                            <table key={s_key} style={{ background: tableColor(s_key) }}>
+                                <tbody>
+                                    {sections.map((rowData, r_key) => {
+                                        return (
+                                            <Row
+                                                first={r_key === 0}
+                                                key={r_key}
+                                                index={r_key}
+                                                elem={rowData}
+                                                address={[s_key, r_key]}
+                                                cellClick={this.cellClick.bind(this)}
+                                            ></Row>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
                     );
                 })}
                 <FloatingCellInfo message={this.state.userMessage}></FloatingCellInfo>

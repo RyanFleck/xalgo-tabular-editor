@@ -15,10 +15,14 @@ td {
 
 
 table {
-    margin: 1em;
+    margin-bottom: 1em;
     overflow-x: auto;
 }
 
+.table-header {
+    margin-bottom: 0.2rem;
+    color: #CCC;
+}
 
 tr:hover {
     background-color: #EEE;
