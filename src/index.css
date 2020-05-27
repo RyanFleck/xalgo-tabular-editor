@@ -37,3 +37,12 @@ th:hover {
 th {
     padding: 2px 5px;
 }
+
+#cellInfo {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    background: white;
+    padding: 1em;
+    border: 1px solid black;
+}

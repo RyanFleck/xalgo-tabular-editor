@@ -94,6 +94,24 @@ class Game extends React.Component {
     }
 }
 
+class FloatingCellInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            message: 'Welcome to the Xalgorithms Rule Editor',
+        };
+    }
+
+    render() {
+        return (
+            <div id={'cellInfo'}>
+                <h3>Cell Information</h3>
+                <p>{this.state.message}</p>
+            </div>
+        );
+    }
+}
+
 class Sheet extends React.Component {
     constructor(props) {
         super(props);
@@ -109,13 +127,12 @@ class Sheet extends React.Component {
     }
 
     getCSV(url) {
-        const sheet = this;
         const xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 const response = xmlhttp.responseText;
                 const table = csvToNestedArrays(response);
-                sheet.setState({ table: table.slice() });
+                this.setState({ table: table.slice() });
             }
         };
         xmlhttp.open('GET', url, false);
@@ -124,6 +141,10 @@ class Sheet extends React.Component {
 
     cellClick(addr) {
         console.log(`Clicked on cell [${addr}]`);
+        const group = addr[0];
+        const row = addr[1];
+        const cell = addr[2];
+        console.log(`Cell has value: ${this.state.table[group][row][cell]}`);
     }
 
     render() {
@@ -143,7 +164,7 @@ class Sheet extends React.Component {
                                             index={r_key}
                                             elem={rowData}
                                             address={[s_key, r_key]}
-                                            cellClick={this.cellClick}
+                                            cellClick={this.cellClick.bind(this)}
                                         ></Row>
                                     );
                                 })}
@@ -151,10 +172,13 @@ class Sheet extends React.Component {
                         </table>
                     );
                 })}
+                <FloatingCellInfo></FloatingCellInfo>
             </div>
         );
     }
 }
+
+/* ==================================================== */
 
 function tableColor(key) {
     const colors = ['#F8E0E0', '#F8ECE0', '#E6F8E0', '#E0ECF8', '#F2E0F7'];
