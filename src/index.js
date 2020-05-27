@@ -100,6 +100,7 @@ class FloatingCellInfo extends React.Component {
             <div id={'cellInfo'}>
                 <h3>Cell Information</h3>
                 <p>{this.props.message}</p>
+                <p>{this.props.hoverMessage}</p>
             </div>
         );
     }
@@ -111,7 +112,13 @@ class Sheet extends React.Component {
         this.state = {
             table: [],
             userMessage: 'Welcome to the Xalgorithms Rule Editor',
+            hoverCellMessage: '',
+            hoverCell: [],
         };
+
+        this.cellClick = this.cellClick.bind(this);
+        this.cellHover = this.cellHover.bind(this);
+        this.getCSV = this.getCSV.bind(this);
     }
 
     componentDidMount() {
@@ -142,8 +149,17 @@ class Sheet extends React.Component {
         this.setState({ userMessage: `Selected cell [ ${group}, ${row}, ${cell} ] =>  ${value}` });
     }
 
+    cellHover(addr) {
+        const group = addr[0];
+        const row = addr[1];
+        const cell = addr[2];
+        this.setState({
+            hoverCellMessage: `Hovering over ${this.state.table[group][0][0]} [ ${group}, ${row}, ${cell} ]`,
+            hoverCell: addr,
+        });
+    }
+
     render() {
-        console.log('[SHEET] Rendering table...');
         return (
             <div id="xa-table">
                 <h1>Table Editor</h1>
@@ -166,7 +182,8 @@ class Sheet extends React.Component {
                                                 index={r_key}
                                                 elem={rowData}
                                                 address={[s_key, r_key]}
-                                                cellClick={this.cellClick.bind(this)}
+                                                cellClick={this.cellClick}
+                                                cellHover={this.cellHover}
                                             ></Row>
                                         );
                                     })}
@@ -175,7 +192,10 @@ class Sheet extends React.Component {
                         </div>
                     );
                 })}
-                <FloatingCellInfo message={this.state.userMessage}></FloatingCellInfo>
+                <FloatingCellInfo
+                    message={this.state.userMessage}
+                    hoverMessage={this.state.hoverCellMessage}
+                ></FloatingCellInfo>
             </div>
         );
     }
@@ -206,6 +226,7 @@ function Row(props) {
                             index={c_key}
                             elem={elem}
                             cellClick={props.cellClick}
+                            cellHover={props.cellHover}
                         ></Cell>
                     );
                 } else {
@@ -217,6 +238,7 @@ function Row(props) {
                             index={c_key}
                             elem={elem}
                             cellClick={props.cellClick}
+                            cellHover={props.cellHover}
                         ></Cell>
                     );
                 }
@@ -225,36 +247,49 @@ function Row(props) {
     );
 }
 
-function Cell(props) {
-    //console.log(`[CELL] Cell [${props.address}] rendered.`);
-    if (props.head) {
-        return (
-            <th onClick={() => props.cellClick(props.address)} index={props.index}>
-                {props.elem}
-            </th>
-        );
-    } else {
-        return (
-            <td onClick={() => props.cellClick(props.address)} index={props.index}>
-                {props.elem}
-            </td>
-        );
-    }
-}
-
 Row.propTypes = {
     index: PropTypes.number,
     elem: PropTypes.arrayOf(PropTypes.string),
     first: PropTypes.bool,
     address: PropTypes.arrayOf(PropTypes.number),
     cellClick: PropTypes.func,
+    cellHover: PropTypes.func,
 };
+
+class Cell extends React.Component {
+    render() {
+        //console.log(`[CELL] Cell [${props.address}] rendered.`);
+        if (this.props.head) {
+            return (
+                <th
+                    onClick={() => this.props.cellClick(this.props.address)}
+                    onMouseOver={() => this.props.cellHover(this.props.address)}
+                    index={this.props.index}
+                >
+                    {this.props.elem}
+                </th>
+            );
+        } else {
+            return (
+                <td
+                    onClick={() => this.props.cellClick(this.props.address)}
+                    onMouseOver={() => this.props.cellHover(this.props.address)}
+                    index={this.props.index}
+                >
+                    {this.props.elem}
+                </td>
+            );
+        }
+    }
+}
 
 Cell.propTypes = {
     index: PropTypes.number,
     elem: PropTypes.string,
     address: PropTypes.arrayOf(PropTypes.number),
     cellClick: PropTypes.func,
+    cellHover: PropTypes.func,
+    head: PropTypes.bool,
 };
 
 /* ==================================================== */

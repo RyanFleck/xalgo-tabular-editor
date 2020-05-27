@@ -44,9 +44,12 @@ th {
 
 #cellInfo {
     position: fixed;
+    max-width: 600px;
     bottom: 5px;
     right: 5px;
+
     background: white;
     padding: 1em;
     border: 1px solid black;
+    border-radius: 4px;
 }
