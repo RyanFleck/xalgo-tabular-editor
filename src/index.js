@@ -95,18 +95,11 @@ class Game extends React.Component {
 }
 
 class FloatingCellInfo extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            message: 'Welcome to the Xalgorithms Rule Editor',
-        };
-    }
-
     render() {
         return (
             <div id={'cellInfo'}>
                 <h3>Cell Information</h3>
-                <p>{this.state.message}</p>
+                <p>{this.props.message}</p>
             </div>
         );
     }
@@ -116,8 +109,8 @@ class Sheet extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            squares: Array(9).fill(null),
             table: [],
+            userMessage: 'Welcome to the Xalgorithms Rule Editor',
         };
     }
 
@@ -144,7 +137,9 @@ class Sheet extends React.Component {
         const group = addr[0];
         const row = addr[1];
         const cell = addr[2];
-        console.log(`Cell has value: ${this.state.table[group][row][cell]}`);
+        const value = this.state.table[group][row][cell];
+        console.log(`Cell has value: ${value}`);
+        this.setState({ userMessage: `Selected cell: "${value}"` });
     }
 
     render() {
@@ -172,7 +167,7 @@ class Sheet extends React.Component {
                         </table>
                     );
                 })}
-                <FloatingCellInfo></FloatingCellInfo>
+                <FloatingCellInfo message={this.state.userMessage}></FloatingCellInfo>
             </div>
         );
     }
