@@ -111,7 +111,7 @@ class Sheet extends React.Component {
     getCSV(url) {
         const sheet = this;
         const xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
+        xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 const response = xmlhttp.responseText;
                 const table = csvToNestedArrays(response);
@@ -122,22 +122,28 @@ class Sheet extends React.Component {
         xmlhttp.send();
     }
 
+    cellClick(addr) {
+        console.log(`Clicked on cell [${addr}]`);
+    }
+
     render() {
-        this.state.table.forEach((e) => console.log(e));
+        console.log('[SHEET] Rendering table...');
         return (
             <div id="xa-table">
                 <h1>Table Viewer</h1>
-                {this.state.table.map(function (sections, s_key) {
+                {this.state.table.map((sections, s_key) => {
                     return (
                         <table key={s_key} style={{ background: tableColor(s_key) }}>
                             <tbody>
-                                {sections.map(function (rowData, r_key) {
+                                {sections.map((rowData, r_key) => {
                                     return (
                                         <Row
                                             first={r_key === 0}
                                             key={r_key}
                                             index={r_key}
                                             elem={rowData}
+                                            address={[s_key, r_key]}
+                                            cellClick={this.cellClick}
                                         ></Row>
                                     );
                                 })}
@@ -156,13 +162,36 @@ function tableColor(key) {
 }
 
 function Row(props) {
+    console.log(
+        `[ROW] TABLE ${props.address[0]} ROW ${props.address[1]} RENDERED: [${props.elem}]`
+    );
     return (
         <tr key={props.index}>
-            {props.elem.map(function (elem, c_key) {
+            {props.elem.map((elem, c_key) => {
+                const cell_address = props.address.slice();
+                cell_address.push(c_key);
                 if (props.first) {
-                    return <HeadCell key={c_key} index={c_key} elem={elem}></HeadCell>;
+                    return (
+                        <Cell
+                            address={cell_address}
+                            head={true}
+                            key={c_key}
+                            index={c_key}
+                            elem={elem}
+                            cellClick={props.cellClick}
+                        ></Cell>
+                    );
                 } else {
-                    return <Cell key={c_key} index={c_key} elem={elem}></Cell>;
+                    return (
+                        <Cell
+                            address={cell_address}
+                            head={false}
+                            key={c_key}
+                            index={c_key}
+                            elem={elem}
+                            cellClick={props.cellClick}
+                        ></Cell>
+                    );
                 }
             })}
         </tr>
@@ -170,24 +199,36 @@ function Row(props) {
 }
 
 function Cell(props) {
-    return <td index={props.index}>{props.elem}</td>;
-}
-
-function HeadCell(props) {
-    return <th index={props.index}>{props.elem}</th>;
+    //console.log(`[CELL] Cell [${props.address}] rendered.`);
+    if (props.head) {
+        return (
+            <th onClick={() => props.cellClick(props.address)} index={props.index}>
+                {props.elem}
+            </th>
+        );
+    } else {
+        return (
+            <td onClick={() => props.cellClick(props.address)} index={props.index}>
+                {props.elem}
+            </td>
+        );
+    }
 }
 
 Row.propTypes = {
     index: PropTypes.number,
     elem: PropTypes.arrayOf(PropTypes.string),
     first: PropTypes.bool,
+    address: PropTypes.arrayOf(PropTypes.number),
+    cellClick: PropTypes.func,
 };
 
 Cell.propTypes = {
     index: PropTypes.number,
     elem: PropTypes.string,
+    address: PropTypes.arrayOf(PropTypes.number),
+    cellClick: PropTypes.func,
 };
-HeadCell.propTypes = Cell.propTypes;
 
 /* ==================================================== */
 
