@@ -139,7 +139,7 @@ class Sheet extends React.Component {
         const cell = addr[2];
         const value = this.state.table[group][row][cell];
         console.log(`Cell has value: ${value}`);
-        this.setState({ userMessage: `Selected cell: "${value}"` });
+        this.setState({ userMessage: `Selected cell [ ${group}, ${row}, ${cell} ] =>  ${value}` });
     }
 
     render() {
@@ -181,9 +181,9 @@ function tableColor(key) {
 }
 
 function Row(props) {
-    console.log(
+    /*console.log(
         `[ROW] TABLE ${props.address[0]} ROW ${props.address[1]} RENDERED: [${props.elem}]`
-    );
+    );*/
     return (
         <tr key={props.index}>
             {props.elem.map((elem, c_key) => {
