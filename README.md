@@ -1,3 +1,7 @@
+# Xalgorithms Tabular Editor Experiment
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/60c47df7-921c-4a53-9e2f-005666e4218a/deploy-status)](https://app.netlify.com/sites/xalgo-tabular-editor/deploys)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
