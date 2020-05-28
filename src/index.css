@@ -42,18 +42,19 @@ th {
 
 #cellInfo {
     position: fixed;
-    max-width: 600px;
-    min-width: 400px;
-    bottom: 5px;
-    right: 5px;
-
+    width: 100%;
+    bottom: 0px;
+    right: 0px;
+    border-top: 2px solid black;
     background: white;
-    padding: 1em;
-    border: 1px solid black;
-    border-radius: 4px;
+}
+
+#innerCellInfo {
+    padding: 0em 1em;
 }
 
 input {
+    display: inline-block;
     background: white;
     border: 1px solid #CCC;
     padding: 0.3em 0.5em;
@@ -61,7 +62,10 @@ input {
     margin-left: 0.1em;
 }
 
-#value-input {
-    min-width: 200px;
+label {
     display: inline-block;
+}
+
+#value-input {
+    min-width: 50%;
 }

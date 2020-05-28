@@ -85,6 +85,12 @@ class Sheet extends React.Component {
     render() {
         return (
             <div id="xa-table">
+                <FloatingCellInfo
+                    hoverCell={this.state.hoverCell}
+                    selectedCell={this.state.selectedCell}
+                    cellValue={this.state.selectedCellValue}
+                    updateCell={this.updateCell}
+                ></FloatingCellInfo>
                 <h1>Table Editor</h1>
                 {this.state.table.map((sections, s_key) => {
                     return (
@@ -115,12 +121,6 @@ class Sheet extends React.Component {
                         </div>
                     );
                 })}
-                <FloatingCellInfo
-                    hoverCell={this.state.hoverCell}
-                    selectedCell={this.state.selectedCell}
-                    cellValue={this.state.selectedCellValue}
-                    updateCell={this.updateCell}
-                ></FloatingCellInfo>
             </div>
         );
     }
@@ -171,21 +171,21 @@ class FloatingCellInfo extends React.Component {
                 : this.state.initialUserMessage;
         return (
             <div id={'cellInfo'}>
-                <h3>Cell Information</h3>
-                <p>{cell_message}</p>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Value:
+                <div id={'innerCellInfo'}>
+                    <h3>Cell Information</h3>
+                    <p>{cell_message}</p>
+                    <form onSubmit={this.handleSubmit}>
+                        <label>Value:</label>
                         <input
                             id={'value-input'}
                             type={'text'}
                             value={this.state.value}
                             onChange={this.handleChange}
                         ></input>
-                    </label>
-                    <input type="submit" value="Submit change" />
-                </form>
-                <p>Hovering over [ {this.props.hoverCell.join(', ')} ]</p>
+                        <input type="submit" value="Submit change" />
+                    </form>
+                    <p>Hovering over [ {this.props.hoverCell.join(', ')} ]</p>
+                </div>
             </div>
         );
     }
