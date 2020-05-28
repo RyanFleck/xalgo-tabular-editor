@@ -14,6 +14,11 @@ CSV files, stored in `.rule.csv` format.
 
 1. Button to upload new CSV files.
 
+## Future Libs:
+
+1. [Redux](https://redux.js.org/basics/actions)
+1. [React Router](https://reacttraining.com/react-router/)
+
 ## Thoughts:
 
 1. CSV as an intermediate format is rough for modification and storage when

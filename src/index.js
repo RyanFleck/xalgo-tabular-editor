@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import Papa from 'papaparse';
 import './index.css';
 
 /* ==================================================== */
@@ -33,6 +34,11 @@ class Sheet extends React.Component {
         xmlhttp.onreadystatechange = () => {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 const response = xmlhttp.responseText;
+                Papa.parse(response, {
+                    complete: function (results) {
+                        console.log(results);
+                    },
+                });
                 const table = csvToNestedArrays(response);
                 this.setState({ table: table.slice() });
             }
