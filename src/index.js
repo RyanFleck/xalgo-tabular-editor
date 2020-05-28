@@ -36,7 +36,7 @@ class Sheet extends React.Component {
                 this.setState({ table: table.slice() });
             }
         };
-        xmlhttp.open('GET', url, false);
+        xmlhttp.open('GET', url, true);
         xmlhttp.send();
     }
 
@@ -157,7 +157,7 @@ class FloatingCellInfo extends React.Component {
 
     componentDidUpdate(oldProps) {
         const newProps = this.props;
-        if (oldProps.cellValue != newProps.cellValue) {
+        if (oldProps.cellValue !== newProps.cellValue) {
             this.setState({ value: newProps.cellValue });
         }
     }
