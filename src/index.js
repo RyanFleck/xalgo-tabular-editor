@@ -9,12 +9,12 @@ class Sheet extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            version: 'Alpha 0.0.7',
             table: [],
             tableRenderingData: {},
             hoverCellMessage: '',
             hoverCell: [],
             selectedCell: [],
-            version: 'Alpha 0.0.6',
         };
 
         this.cellClick = this.cellClick.bind(this);
