@@ -14,6 +14,7 @@ class Sheet extends React.Component {
             hoverCellMessage: '',
             hoverCell: [],
             selectedCell: [],
+            version: 'Alpha 0.0.5',
         };
 
         this.cellClick = this.cellClick.bind(this);
@@ -91,6 +92,9 @@ class Sheet extends React.Component {
                     cellValue={this.state.selectedCellValue}
                     updateCell={this.updateCell}
                 ></FloatingCellInfo>
+                <div id="version-info">
+                    <div>{this.state.version}</div>
+                </div>
                 <h1>Table Editor</h1>
                 {this.state.table.map((sections, s_key) => {
                     return (
