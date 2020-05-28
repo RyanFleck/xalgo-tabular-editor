@@ -3,141 +3,6 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import './index.css';
 
-/*
- * Square class
- */
-function Square(props) {
-    return (
-        <button className="square" onClick={props.onClick}>
-            {props.value}
-        </button>
-    );
-}
-
-Square.propTypes = {
-    value: PropTypes.string,
-    onClick: PropTypes.func,
-};
-
-/*
- * Board class contains the game state and generates squares.
- */
-
-class Board extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            squares: Array(9).fill(null),
-            xIsNext: true,
-        };
-    }
-
-    handleClick(i) {
-        const squareArr = this.state.squares.slice();
-        squareArr[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({ squares: squareArr, xIsNext: !this.state.xIsNext });
-    }
-
-    renderSquare(i) {
-        return (
-            <Square
-                value={this.state.squares[i]}
-                instance={i}
-                onClick={() => this.handleClick(i)}
-            />
-        );
-    }
-
-    render() {
-        const status = `Next player is ${this.state.xIsNext ? 'X' : 'O'}`;
-        return (
-            <div>
-                <div className="status">{status}</div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2) /* All js needs to be in curlies. */}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
-        );
-    }
-}
-
-/* ==================================================== */
-/* ==================================================== */
-/* ==================================================== */
-
-class FloatingCellInfo extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: 'Select a cell to make changes',
-            initialUserMessage: 'Welcome to the Xalgorithms Rule Editor',
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange(event) {
-        this.setState({ value: event.target.value });
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        this.props.updateCell(this.state.value);
-    }
-
-    componentDidUpdate(oldProps) {
-        const newProps = this.props;
-        if (oldProps.cellValue != newProps.cellValue) {
-            this.setState({ value: newProps.cellValue });
-        }
-    }
-
-    render() {
-        const cell_message =
-            this.props.selectedCell.length > 0
-                ? `Selected [ ${this.props.selectedCell.join(', ')} ] =>  ${this.props.cellValue}`
-                : this.state.initialUserMessage;
-        return (
-            <div id={'cellInfo'}>
-                <h3>Cell Information</h3>
-                <p>{cell_message}</p>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Value:
-                        <input
-                            id={'value-input'}
-                            type={'text'}
-                            value={this.state.value}
-                            onChange={this.handleChange}
-                        ></input>
-                    </label>
-                    <input type="submit" value="Submit change" />
-                </form>
-                <p>Hovering over [ {this.props.hoverCell.join(', ')} ]</p>
-            </div>
-        );
-    }
-}
-
-FloatingCellInfo.propTypes = {
-    hoverCell: PropTypes.arrayOf(PropTypes.number),
-    selectedCell: PropTypes.arrayOf(PropTypes.number),
-    cellValue: PropTypes.string,
-    updateCell: PropTypes.func,
-};
-
 /* ==================================================== */
 
 class Sheet extends React.Component {
@@ -267,6 +132,71 @@ function tableColor(key) {
     const colors = ['#F8E0E0', '#F8ECE0', '#E6F8E0', '#E0ECF8', '#F2E0F7'];
     return colors[key % colors.length];
 }
+
+/* ==================================================== */
+
+class FloatingCellInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: 'Select a cell to make changes',
+            initialUserMessage: 'Welcome to the Xalgorithms Rule Editor',
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({ value: event.target.value });
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        this.props.updateCell(this.state.value);
+    }
+
+    componentDidUpdate(oldProps) {
+        const newProps = this.props;
+        if (oldProps.cellValue != newProps.cellValue) {
+            this.setState({ value: newProps.cellValue });
+        }
+    }
+
+    render() {
+        const cell_message_value = this.props.cellValue || 'Empty Cell';
+        const cell_message_coords = this.props.selectedCell.join(', ');
+        const cell_message =
+            this.props.selectedCell.length > 0
+                ? `Selected [ ${cell_message_coords} ] =>  ${cell_message_value}`
+                : this.state.initialUserMessage;
+        return (
+            <div id={'cellInfo'}>
+                <h3>Cell Information</h3>
+                <p>{cell_message}</p>
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        Value:
+                        <input
+                            id={'value-input'}
+                            type={'text'}
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                        ></input>
+                    </label>
+                    <input type="submit" value="Submit change" />
+                </form>
+                <p>Hovering over [ {this.props.hoverCell.join(', ')} ]</p>
+            </div>
+        );
+    }
+}
+
+FloatingCellInfo.propTypes = {
+    hoverCell: PropTypes.arrayOf(PropTypes.number),
+    selectedCell: PropTypes.arrayOf(PropTypes.number),
+    cellValue: PropTypes.string,
+    updateCell: PropTypes.func,
+};
 
 /* ==================================================== */
 
