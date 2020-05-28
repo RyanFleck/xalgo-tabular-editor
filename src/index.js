@@ -81,7 +81,7 @@ class FloatingCellInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: this.props.cellValue,
+            value: 'Select a cell to make changes',
             initialUserMessage: 'Welcome to the Xalgorithms Rule Editor',
         };
         this.handleChange = this.handleChange.bind(this);
@@ -117,7 +117,8 @@ class FloatingCellInfo extends React.Component {
                     <label>
                         Value:
                         <input
-                            type="text"
+                            id={'value-input'}
+                            type={'text'}
                             value={this.state.value}
                             onChange={this.handleChange}
                         ></input>

@@ -12,8 +12,6 @@ td {
     border-collapse: collapse;
 }
 
-
-
 table {
     margin-bottom: 1em;
     overflow-x: auto;
@@ -53,4 +51,17 @@ th {
     padding: 1em;
     border: 1px solid black;
     border-radius: 4px;
+}
+
+input {
+    background: white;
+    border: 1px solid #CCC;
+    padding: 0.3em 0.5em;
+    margin-right: 0.4em;
+    margin-left: 0.1em;
+}
+
+#value-input {
+    min-width: 200px;
+    display: inline-block;
 }
