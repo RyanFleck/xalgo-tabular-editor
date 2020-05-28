@@ -45,6 +45,7 @@ th {
 #cellInfo {
     position: fixed;
     max-width: 600px;
+    min-width: 400px;
     bottom: 5px;
     right: 5px;
 
