@@ -2,6 +2,11 @@ body {
     font: 14px 'Century Gothic', Futura, sans-serif;
     margin: 20px;
     max-width: 100%;
+    height: 100%;
+}
+
+#root {
+    min-height: 100%;
 }
 
 table,
@@ -68,4 +73,16 @@ label {
 
 #value-input {
     min-width: 50%;
+}
+
+@media only screen and (min-width: 620px) {
+    #cellInfo {
+        position: fixed;
+        width: 600px;
+        bottom: 0px;
+        right: 0px;
+        border-top: 2px solid black;
+        background: white;
+        border-left: 1px solid black;
+    }
 }
