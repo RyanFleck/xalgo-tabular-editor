@@ -2,8 +2,10 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/60c47df7-921c-4a53-9e2f-005666e4218a/deploy-status)](https://app.netlify.com/sites/xalgo-tabular-editor/deploys)
 
-This is a `.csv` editor that focuses on modifying **Xalgorithms** rule-formatted
+**XTE** is a `.csv` editor that focuses on modifying **Xalgorithms** rule-formatted
 CSV files, stored in `.rule.csv` format.
+
+This version has been **succeeded** by **V2** which can be found at [github.com/RyanFleck/xalgo-tabular-editor-v2](https://github.com/RyanFleck/xalgo-tabular-editor-v2).
 
 ## Features:
 
