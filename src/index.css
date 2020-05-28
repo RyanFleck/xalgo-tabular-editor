@@ -36,20 +36,6 @@ table {
     color: #CCC;
 }
 
-
-td:hover,
-th:hover {
-    background-color: #FFF !important;
-}
-
-tr:hover>th,
-tr:hover>td {
-    background-color: #EEE !important;
-    border-bottom: 2px solid black;
-}
-
-
-
 #cellInfo {
     z-index: 1000;
     position: fixed;

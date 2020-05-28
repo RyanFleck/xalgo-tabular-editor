@@ -116,6 +116,7 @@ class Sheet extends React.Component {
                                                 index={r_key}
                                                 elem={rowData}
                                                 address={[s_key, r_key]}
+                                                selected={this.state.selectedCell}
                                                 cellClick={this.cellClick}
                                                 cellHover={this.cellHover}
                                                 cellColor={color}
@@ -220,6 +221,7 @@ function Row(props) {
                     return (
                         <Cell
                             address={cell_address}
+                            selected={props.selected}
                             head={true}
                             key={c_key}
                             index={c_key}
@@ -233,6 +235,7 @@ function Row(props) {
                     return (
                         <Cell
                             address={cell_address}
+                            selected={props.selected}
                             head={false}
                             key={c_key}
                             index={c_key}
@@ -253,6 +256,7 @@ Row.propTypes = {
     elem: PropTypes.arrayOf(PropTypes.string),
     first: PropTypes.bool,
     address: PropTypes.arrayOf(PropTypes.number),
+    selected: PropTypes.arrayOf(PropTypes.number),
     cellClick: PropTypes.func,
     cellHover: PropTypes.func,
     cellColor: PropTypes.string,
@@ -263,13 +267,24 @@ Row.propTypes = {
 class Cell extends React.Component {
     render() {
         //console.log(`[CELL] Cell [${props.address}] rendered.`);
+        const addr = this.props.address;
+        const sel = this.props.selected;
+        let color = this.props.cellColor;
+        if (addr[0] === sel[0]) {
+            if (addr[1] === sel[1]) {
+                if (addr[2] === sel[2]) {
+                    console.log(`WOOO! I AM SELECTED! color:${color}`);
+                    color = genSelectColor(color);
+                }
+            }
+        }
         if (this.props.head) {
             return (
                 <th
                     onClick={() => this.props.cellClick(this.props.address)}
                     onMouseOver={() => this.props.cellHover(this.props.address)}
                     index={this.props.index}
-                    style={{ background: this.props.cellColor }}
+                    style={{ background: color }}
                 >
                     {this.props.elem}
                 </th>
@@ -280,7 +295,7 @@ class Cell extends React.Component {
                     onClick={() => this.props.cellClick(this.props.address)}
                     onMouseOver={() => this.props.cellHover(this.props.address)}
                     index={this.props.index}
-                    style={{ background: this.props.cellColor }}
+                    style={{ background: color }}
                 >
                     {this.props.elem}
                 </td>
@@ -292,7 +307,9 @@ class Cell extends React.Component {
 Cell.propTypes = {
     index: PropTypes.number,
     elem: PropTypes.string,
+    cellColor: PropTypes.string,
     address: PropTypes.arrayOf(PropTypes.number),
+    selected: PropTypes.arrayOf(PropTypes.number),
     cellClick: PropTypes.func,
     cellHover: PropTypes.func,
     head: PropTypes.bool,
@@ -319,6 +336,7 @@ function csvToNestedArrays(csvText) {
 function rowSplit(row) {
     const rowCells = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
     /*
+    // Remove empty cells at end of row.
     let len = rowCells.length - 1;
     while (rowCells[len] == '') {
         rowCells.pop();
@@ -326,6 +344,12 @@ function rowSplit(row) {
     }
     */
     return rowCells;
+}
+
+function genSelectColor(originalColor) {
+    const hexStr = originalColor.substr(1);
+    const newVal = parseInt(hexStr, 16) - 2236962; //parseInt('222222', 16);
+    return `#${newVal.toString(16)}`;
 }
 
 /* ==================================================== */
