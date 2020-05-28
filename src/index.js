@@ -14,7 +14,7 @@ class Sheet extends React.Component {
             hoverCellMessage: '',
             hoverCell: [],
             selectedCell: [],
-            version: 'Alpha 0.0.5',
+            version: 'Alpha 0.0.6',
         };
 
         this.cellClick = this.cellClick.bind(this);
@@ -105,9 +105,10 @@ class Sheet extends React.Component {
                                     .map((s) => s[0].toUpperCase() + s.substr(1).toLowerCase())
                                     .join(' ') + ' Subtable'}
                             </h3>
-                            <table key={s_key} style={{ background: tableColor(s_key) }}>
+                            <table key={s_key}>
                                 <tbody>
                                     {sections.map((rowData, r_key) => {
+                                        const color = tableColor(s_key);
                                         return (
                                             <Row
                                                 first={r_key === 0}
@@ -117,6 +118,7 @@ class Sheet extends React.Component {
                                                 address={[s_key, r_key]}
                                                 cellClick={this.cellClick}
                                                 cellHover={this.cellHover}
+                                                cellColor={color}
                                             ></Row>
                                         );
                                     })}
@@ -213,6 +215,7 @@ function Row(props) {
             {props.elem.map((elem, c_key) => {
                 const cell_address = props.address.slice();
                 cell_address.push(c_key);
+                const color = props.cellColor;
                 if (props.first) {
                     return (
                         <Cell
@@ -223,6 +226,7 @@ function Row(props) {
                             elem={elem}
                             cellClick={props.cellClick}
                             cellHover={props.cellHover}
+                            cellColor={color}
                         ></Cell>
                     );
                 } else {
@@ -235,6 +239,7 @@ function Row(props) {
                             elem={elem}
                             cellClick={props.cellClick}
                             cellHover={props.cellHover}
+                            cellColor={color}
                         ></Cell>
                     );
                 }
@@ -250,6 +255,7 @@ Row.propTypes = {
     address: PropTypes.arrayOf(PropTypes.number),
     cellClick: PropTypes.func,
     cellHover: PropTypes.func,
+    cellColor: PropTypes.string,
 };
 
 /* ==================================================== */
@@ -263,6 +269,7 @@ class Cell extends React.Component {
                     onClick={() => this.props.cellClick(this.props.address)}
                     onMouseOver={() => this.props.cellHover(this.props.address)}
                     index={this.props.index}
+                    style={{ background: this.props.cellColor }}
                 >
                     {this.props.elem}
                 </th>
@@ -273,6 +280,7 @@ class Cell extends React.Component {
                     onClick={() => this.props.cellClick(this.props.address)}
                     onMouseOver={() => this.props.cellHover(this.props.address)}
                     index={this.props.index}
+                    style={{ background: this.props.cellColor }}
                 >
                     {this.props.elem}
                 </td>

@@ -1,12 +1,14 @@
 body {
     font: 14px 'Century Gothic', Futura, sans-serif;
     margin: 20px;
-    max-width: 100%;
-    height: 100%;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    display: block;
 }
 
 #root {
-    min-height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 table,
@@ -20,6 +22,8 @@ td {
 table {
     margin-bottom: 1em;
     overflow-x: auto;
+    display: block;
+    cursor: cell;
 }
 
 .table-header {
@@ -78,7 +82,7 @@ label {
 #version-info {
     position: fixed;
     top: 0;
-    right: 0;
+    right: 0px;
     padding: 5px;
     text-shadow: 0px 0px 3px rgb(187, 121, 187);
 }
