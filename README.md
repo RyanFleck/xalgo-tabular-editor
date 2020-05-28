@@ -14,6 +14,13 @@ CSV files, stored in `.rule.csv` format.
 
 1. Button to upload new CSV files.
 
+## Thoughts:
+
+1. CSV as an intermediate format is rough for modification and storage when
+   compared to JSON, which (comparatively) requires next to zero work for import/modification/export.
+1. 
+
+
 ## React Sub-Docs:
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
