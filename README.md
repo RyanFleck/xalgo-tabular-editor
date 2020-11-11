@@ -1,3 +1,7 @@
+**Archived,** see <https://github.com/RyanFleck/Xalgo-System-Prototype> for the latest prototype.
+
+<br />
+
 # Xalgorithms Tabular Editor Experiment
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/60c47df7-921c-4a53-9e2f-005666e4218a/deploy-status)](https://app.netlify.com/sites/xalgo-tabular-editor/deploys)
